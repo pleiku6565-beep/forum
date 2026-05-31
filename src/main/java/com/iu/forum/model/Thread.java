@@ -16,10 +16,29 @@ public class Thread {
 
     @ManyToOne
     @JoinColumn(name = "creator_id", nullable = false)
-    private User creator; // Người tạo ra thread
+    private User creator;
 
-    @Column(name = "created_at")
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = true)
+    private Category category;
+
+    @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt; // Audit trail: Lưu vết thời gian chỉnh sửa cuối cùng
+
+    @Column(name = "views", nullable = false)
+    private int views = 0; // Lượt xem
+
+    @Column(name = "is_sticky", nullable = false)
+    private boolean isSticky = false; // Ghim bài viết lên đầu
+
+    @Column(name = "status", length = 20, nullable = false)
+    private String status = "OPEN"; // Trạng thái: OPEN (Đang mở) hoặc CLOSED (Khóa bình luận)
+
+    @Column(name = "is_deleted", nullable = false)
+    private boolean deleted = false; // TÍNH NĂNG SOFT DELETE: true = đã xóa (ẩn), false = hiển thị
 
     public Thread() {
         this.createdAt = LocalDateTime.now();
@@ -31,7 +50,13 @@ public class Thread {
         this.createdAt = LocalDateTime.now();
     }
 
-    // Getter và Setter
+    // Tự động cập nhật thời gian updatedAt mỗi khi Entity bị thay đổi 
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    // --- GETTER VÀ SETTER ---
     public Long getId() {
         return id;
     }
@@ -62,5 +87,52 @@ public class Thread {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public int getViews() {
+        return views;
+    }
+
+    public void setViews(int views) {
+        this.views = views;
+    }
+
+    public boolean isSticky() {
+        return isSticky;
+    }
+
+    public void setSticky(boolean sticky) {
+        this.isSticky = sticky;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }

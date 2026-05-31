@@ -18,26 +18,26 @@ public class Message {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private User user; // Người viết bài
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "thread_id", nullable = false)
-    private Thread thread; // Thuộc bài thảo luận nào
+    private Thread thread;
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
     @Column(name = "file_url")
-    private String fileUrl;  
+    private String fileUrl;
 
-    // Thêm Getter và Setter cho nó
-    public String getFileUrl() {
-        return fileUrl;
-    }
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt; // Thời gian sửa bình luận
 
-    public void setFileUrl(String fileUrl) {
-        this.fileUrl = fileUrl;
-    }
+    @Column(name = "is_edited", nullable = false)
+    private boolean edited = false; // Đánh dấu bình luận này đã bị sửa (như trên Facebook)
+
+    @Column(name = "is_deleted", nullable = false)
+    private boolean deleted = false; // Tính năng xóa mềm cho bình luận
 
     public Message() {
         this.createdAt = LocalDateTime.now();
@@ -50,7 +50,13 @@ public class Message {
         this.createdAt = LocalDateTime.now();
     }
 
-    // Getter và Setter
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
+        this.edited = true; // Hễ có cập nhật nội dung là bật cờ "Đã chỉnh sửa" lên true
+    }
+
+    // --- GETTER VÀ SETTER ---
     public Long getId() {
         return id;
     }
@@ -89,5 +95,37 @@ public class Message {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public String getFileUrl() {
+        return fileUrl;
+    }
+
+    public void setFileUrl(String fileUrl) {
+        this.fileUrl = fileUrl;
+    }
+
+    public boolean isEdited() {
+        return edited;
+    }
+
+    public void setEdited(boolean edited) {
+        this.edited = edited;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 }
