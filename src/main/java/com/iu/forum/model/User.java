@@ -30,21 +30,37 @@ public class User {
     @Column(unique = true, nullable = false)
     private String email;
 
+    @NotBlank(message = "Họ và tên không được để trống")
+    @Size(max = 100, message = "Họ và tên không được vượt quá 100 ký tự")
+    @Column(nullable = false, length = 100)
+    private String fullName;
+
+    @Size(max = 200, message = "BIO không được vượt quá 200 ký tự")
+    @Column(nullable = false, length = 200)
+    private String bio;
+
+    @Column(length = 255)
+    private String avatar;
+
     @Column(nullable = false, length = 20)
     private String role; 
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
+    @Column(name = "is_active")
+    private boolean active = true;
+
     public User() {
         this.createdAt = LocalDateTime.now();
     }
 
     // Hàm khởi tạo đầy đủ tham số
-    public User(String username, String password, String email, String role) {
+    public User(String username, String password, String email, String fullName, String bio, String role) {
         this.username = username;
         this.password = password;
         this.email = email;
+        this.fullName = fullName;
         this.role = role;
         this.createdAt = LocalDateTime.now();
     }
@@ -74,12 +90,35 @@ public class User {
         this.password = password;
     }
 
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
     public String getEmail() {
         return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
     public String getRole() {
@@ -96,5 +135,12 @@ public class User {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+     public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }
