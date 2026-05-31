@@ -1,4 +1,4 @@
-package com.university.forum.config;
+package com.iu.forum.config;
 
 public class SecurityConfig {
 

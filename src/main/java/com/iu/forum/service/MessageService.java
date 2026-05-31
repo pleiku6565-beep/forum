@@ -1,4 +1,4 @@
-package com.university.forum.service;
+package com.iu.forum.service;
 
 public class MessageService {
 

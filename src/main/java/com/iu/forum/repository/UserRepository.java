@@ -1,4 +1,4 @@
-package com.university.forum.repository;
+package com.iu.forum.repository;
 
 public class UserRepository {
 
